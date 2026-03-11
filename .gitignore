@@ -1,0 +1,11 @@
+# 忽略编译生成的文件
+target/
+
+# 忽略 IDEA 本地配置文件
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# 忽略 Mac 系统文件 (如果你用 Mac 的话)
+.DS_Store
