@@ -94,4 +94,21 @@
             <version>0.3.8</version>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <!-- 这个插件是 Spring Boot 能够独立运行的核心，绝对不能丢！ -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 加上 repackage 目标，强制将普通 jar 重新打包成可执行的胖 jar -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
