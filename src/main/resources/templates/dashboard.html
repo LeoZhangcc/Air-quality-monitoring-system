@@ -73,7 +73,6 @@
             </section>
 
             <div class="space-y-8 flex flex-col">
-
                 <section class="bg-white rounded-2xl border border-neutral-200 p-6 shadow-sm flex items-start gap-4">
                     <div id="mask-icon-bg" class="p-4 rounded-xl shrink-0 bg-green-100 text-green-600">
                         <i data-lucide="shield-check" id="mask-icon" class="w-8 h-8"></i>
@@ -179,8 +178,32 @@
 
     let currentSearchQuery = '';
 
-    const alertSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+    // ==========================================
+    // 🎵 移动端音频解锁补丁 (核心黑科技)
+    // ==========================================
+    const alertSound = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
     alertSound.loop = true;
+
+    let audioUnlocked = false;
+    function unlockAudio() {
+        if (!audioUnlocked) {
+            // 让音频极短地播放一下然后瞬间暂停，以此获取手机浏览器的“永久播放通行证”
+            alertSound.play().then(() => {
+                alertSound.pause();
+                alertSound.currentTime = 0;
+                audioUnlocked = true;
+                console.log("🔊 移动端音频已成功解锁！");
+                // 解锁后就移除监听，避免浪费性能
+                document.body.removeEventListener('click', unlockAudio);
+                document.body.removeEventListener('touchstart', unlockAudio);
+            }).catch(e => console.log("音频解锁等待中...", e));
+        }
+    }
+    // 监听用户在网页上的任意点击或触摸，只要摸一下屏幕就解锁声音
+    document.body.addEventListener('click', unlockAudio);
+    document.body.addEventListener('touchstart', unlockAudio);
+
+    // ==========================================
 
     closeModalBtn.addEventListener('click', () => {
         emergencyModal.classList.add('opacity-0');
@@ -256,9 +279,6 @@
 
                             dietContainer.innerHTML += `
                                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-200 hover:shadow-md flex flex-col">
-                                    <div class="h-48 relative overflow-hidden bg-slate-100">
-                                        <img src="${diet.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&fit=crop'" class="w-full h-full object-cover" alt="${diet.title}">
-                                    </div>
                                     <div class="p-6 flex-1 flex flex-col">
                                         <div class="flex gap-2 mb-3">${tagsHtml}</div>
                                         <h3 class="text-xl font-bold text-neutral-900 mb-2">${diet.title}</h3>
@@ -283,22 +303,13 @@
                                     <span>${step}</span>
                                 </li>`).join('');
 
-                            let reverseClass = index % 2 !== 0 ? 'md:flex-row-reverse' : '';
-
                             activityContainer.innerHTML += `
-                                <div class="flex flex-col md:flex-row gap-8 items-center ${reverseClass}">
-                                    <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md h-64 md:h-80 bg-slate-100 flex-shrink-0">
-                                        <img src="${activity.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&fit=crop'" class="w-full h-full object-cover" alt="${activity.title}">
-                                    </div>
-                                    <div class="w-full md:w-1/2 space-y-4">
-                                        <div class="inline-block px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-sm font-semibold mb-2">Activity ${index + 1}</div>
-                                        <h3 class="text-2xl font-bold text-neutral-900">${activity.title}</h3>
-                                        <p class="text-neutral-600 text-lg leading-relaxed">${activity.description}</p>
-                                        <div class="pt-4">
-                                            <h4 class="font-semibold text-neutral-900 mb-3 text-lg">Step-by-Step Guide:</h4>
-                                            <ul class="space-y-3">${stepsHtml}</ul>
-                                        </div>
-                                    </div>
+                                <div class="bg-white rounded-2xl p-6 border border-neutral-200 shadow-sm">
+                                    <div class="inline-block px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-sm font-semibold mb-4">Activity ${index + 1}</div>
+                                    <h3 class="text-2xl font-bold text-neutral-900 mb-2">${activity.title}</h3>
+                                    <p class="text-neutral-600 text-lg leading-relaxed mb-6">${activity.description}</p>
+                                    <h4 class="font-semibold text-neutral-900 mb-3 text-lg">Step-by-Step Guide:</h4>
+                                    <ul class="space-y-3">${stepsHtml}</ul>
                                 </div>
                             `;
                         });
@@ -320,7 +331,7 @@
                 emergencyModal.querySelector('div').classList.remove('scale-95');
                 emergencyModal.querySelector('div').classList.add('scale-100');
 
-                alertSound.play().catch(e => console.log("浏览器限制了自动播放声音，需用户先与页面交互", e));
+                alertSound.play().catch(e => console.log("警报声播放失败", e));
             }, 500);
         }
 
