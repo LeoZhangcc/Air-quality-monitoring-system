@@ -110,29 +110,71 @@
 
         <!-- 饮食与补水 -->
         <div class="space-y-8">
-            <!-- 标题部分 -->
             <div class="text-center max-w-2xl mx-auto space-y-4">
                 <h2 class="text-3xl font-bold text-neutral-900">Diet & Hydration</h2>
                 <p class="text-neutral-500 text-lg">The API is currently unhealthy. Protect your respiratory health from the inside out with these recipes.</p>
             </div>
 
-            <!-- 🌟 修复关键点：网格容器必须独立在这里 -->
-            <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 这里的卡片将由 JS 自动生成并塞入 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!--                <div th:each="recipe : ${recipes}" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-200 hover:shadow-md flex flex-col">-->
+<!--                    <div class="h-48 relative overflow-hidden bg-slate-100">-->
+<!--                        <img th:src="${recipe.image}" class="w-full h-full object-cover" alt="Recipe Image">-->
+<!--                    </div>-->
+<!--                    <div class="p-6 flex-1 flex flex-col">-->
+<!--                        <div class="flex gap-2 mb-3">-->
+<!--                            <span th:each="tag : ${recipe.tags}" class="text-xs font-semibold px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full" th:text="${tag}"></span>-->
+<!--                        </div>-->
+<!--                        <h3 class="text-xl font-bold text-neutral-900 mb-2" th:text="${recipe.title}">Recipe Title</h3>-->
+<!--                        <p class="text-sm text-neutral-600 mb-4 flex-1" th:text="${recipe.benefits}">Benefits text here...</p>-->
+
+<!--                        <div class="mt-auto pt-4 border-t border-neutral-100">-->
+<!--                            <h4 class="text-sm font-semibold text-neutral-900 mb-2">Ingredients:</h4>-->
+<!--                            <ul class="space-y-1">-->
+<!--                                <li th:each="ing : ${recipe.ingredients}" class="text-sm text-neutral-500 flex items-start gap-2">-->
+<!--                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i>-->
+<!--                                    <span th:text="${ing}">Ingredient item</span>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 这里的卡片将由 JS 自动生成并塞入 -->
+                </div>
             </div>
         </div>
 
         <!-- 室内运动指南 -->
         <div class="space-y-12 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-            <!-- 标题部分 -->
             <div class="text-center max-w-2xl mx-auto space-y-4">
                 <h2 class="text-3xl font-bold text-neutral-900">Indoor Physical Activities</h2>
                 <p class="text-neutral-500 text-lg">Since it's unsafe outside, follow these low-impact guides to stay active indoors.</p>
             </div>
 
-            <!-- 🌟 修复关键点：网格容器必须独立在这里 -->
-            <div id="activity-container" class="space-y-12">
-                <!-- 这里的卡片将由 JS 自动生成并塞入 -->
+            <div class="space-y-12">
+<!--                <div th:each="activity, stat : ${activities}" class="flex flex-col md:flex-row gap-8 items-center" th:classappend="${stat.odd ? 'md:flex-row-reverse' : ''}">-->
+<!--                    <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md h-64 md:h-80 bg-slate-100">-->
+<!--                        <img th:src="${activity.image}" class="w-full h-full object-cover" alt="Activity">-->
+<!--                    </div>-->
+<!--                    <div class="w-full md:w-1/2 space-y-4">-->
+<!--                        <div class="inline-block px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-sm font-semibold mb-2" th:text="'Activity ' + ${stat.count}"></div>-->
+<!--                        <h3 class="text-2xl font-bold text-neutral-900" th:text="${activity.title}">Title</h3>-->
+<!--                        <p class="text-neutral-600 text-lg leading-relaxed" th:text="${activity.description}">Description</p>-->
+
+<!--                        <div class="pt-4">-->
+<!--                            <h4 class="font-semibold text-neutral-900 mb-3 text-lg">Step-by-Step Guide:</h4>-->
+<!--                            <ul class="space-y-3">-->
+<!--                                <li th:each="step, stepStat : ${activity.steps}" class="flex gap-3 text-neutral-700">-->
+<!--                                    <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 font-bold text-sm" th:text="${stepStat.count}"></span>-->
+<!--                                    <span th:text="${step}">Step description</span>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div id="activity-container" class="space-y-12">
+                    <!-- 这里的卡片将由 JS 自动生成并塞入 -->
+                </div>
             </div>
         </div>
     </div>
@@ -150,16 +192,15 @@
     const resultSection = document.getElementById('result-section');
 
     const quickActionPanel = document.getElementById('quick-action-panel');
-    const lifestyleInterventions = document.getElementById('lifestyle-interventions');
+    const lifestyleInterventions = document.getElementById('lifestyle-interventions'); // 获取生活方式模块容器
 
-    // 加上了 async 关键字，完美解决 await 报错
     async function processAirQuality(locationName, apiValue) {
-        // 1. 页面加载时，立刻向用户请求发送系统通知的权限
+        // 1. 页面加载时，立刻向爷爷请求发送系统通知的权限
         if ("Notification" in window) {
             if (Notification.permission !== "granted" && Notification.permission !== "denied") {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        console.log("用户允许了系统推送通知。");
+                        console.log("太棒了！用户允许了系统推送通知。");
                     }
                 });
             }
@@ -168,18 +209,20 @@
         // 2. 封装一个发送系统通知的函数
         function triggerSystemNotification(locationName, aqiValue) {
             if ("Notification" in window && Notification.permission === "granted") {
+                // 瞬间触发系统级通知 (完美满足 < 5秒 的验收标准)
                 const notification = new Notification("🚨 AirGuard 紧急警报", {
                     body: `警告！${locationName} 的空气指数已达 ${aqiValue} (不健康)。请立即回到室内！`,
-                    icon: "https://cdn-icons-png.flaticon.com/512/564/564246.png",
-                    vibrate: [200, 100, 200]
+                    icon: "https://cdn-icons-png.flaticon.com/512/564/564246.png", // 一个醒目的警告小图标
+                    vibrate: [200, 100, 200] // 如果是安卓手机，会让手机连续震动！
                 });
+
+                // 点击这个系统通知，可以自动帮爷爷跳回我们的仪表盘页面
                 notification.onclick = function() {
                     window.focus();
                     this.close();
                 };
             }
         }
-
         resultSection.classList.remove('hidden');
         document.getElementById('display-location').innerText = locationName;
 
@@ -209,11 +252,8 @@
             // Unhealthy (API >= 100) - 触发红色警报及生活方式干预面板
             setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-red-50', 'border-red-200', 'text-red-500', 'bg-red-500', 'Unhealthy');
             setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-orange-100', 'text-orange-600', 'alert-triangle', 'The air quality is unhealthy. We highly recommend wearing an N95 respirator mask if you need to go outdoors.');
-
-            // 2. 去后端获取随机推荐数据 (动态卡片渲染)
+// 2. 去后端获取随机推荐数据
             try {
-                // 注意：这里调用的是 /api/recommendations，请确保你的 Java 后端也是 @GetMapping("/api/recommendations")
-                // 如果你的 Java 是 /getRecommendations，请把这里改回去
                 const recResponse = await fetch('/getRecommendations');
                 if (recResponse.ok) {
                     const recData = await recResponse.json();
@@ -223,18 +263,19 @@
                     if (dietContainer) {
                         dietContainer.innerHTML = '';
                         recData.diets.forEach(diet => {
+                            // 拼接标签
                             let tagsHtml = diet.tags.map(tag => `<span class="text-xs font-semibold px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full">${tag}</span>`).join('');
+                            // 拼接配料
                             let ingredientsHtml = diet.ingredients.map(ing => `
                                 <li class="text-sm text-neutral-500 flex items-start gap-2">
                                     <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i>
                                     <span>${ing}</span>
                                 </li>`).join('');
 
-                            // 带有 onerror 备用图机制的精美卡片
                             dietContainer.innerHTML += `
                                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-200 hover:shadow-md flex flex-col">
                                     <div class="h-48 relative overflow-hidden bg-slate-100">
-                                        <img src="${diet.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&fit=crop'" class="w-full h-full object-cover" alt="${diet.title}">
+                                        <img src="${diet.imageUrl}" class="w-full h-full object-cover" alt="Recipe Image">
                                     </div>
                                     <div class="p-6 flex-1 flex flex-col">
                                         <div class="flex gap-2 mb-3">${tagsHtml}</div>
@@ -255,19 +296,20 @@
                     if (activityContainer) {
                         activityContainer.innerHTML = '';
                         recData.activities.forEach((activity, index) => {
+                            // 拼接步骤
                             let stepsHtml = activity.steps.map((step, i) => `
                                 <li class="flex gap-3 text-neutral-700">
                                     <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 font-bold text-sm">${i + 1}</span>
                                     <span>${step}</span>
                                 </li>`).join('');
 
+                            // 为了实现你原本设计的交错排版效果，偶数项翻转左右布局
                             let reverseClass = index % 2 !== 0 ? 'md:flex-row-reverse' : '';
 
-                            // 带有 onerror 备用图机制的大卡片
                             activityContainer.innerHTML += `
                                 <div class="flex flex-col md:flex-row gap-8 items-center ${reverseClass}">
                                     <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md h-64 md:h-80 bg-slate-100 flex-shrink-0">
-                                        <img src="${activity.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&fit=crop'" class="w-full h-full object-cover" alt="${activity.title}">
+                                        <img src="${activity.imageUrl}" class="w-full h-full object-cover" alt="${activity.title}">
                                     </div>
                                     <div class="w-full md:w-1/2 space-y-4">
                                         <div class="inline-block px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-sm font-semibold mb-2">Activity ${index + 1}</div>
@@ -282,21 +324,22 @@
                             `;
                         });
                     }
+
+                    // 重新渲染新生成的图标
+                    lucide.createIcons();
                 }
             } catch (error) {
-                console.error("Failed to load recommendations:", error);
+                console.error("获取推荐数据失败:", error);
             }
-
-            // 延迟展示紧急动作面板 (1秒)
+            // 延迟展示紧急动作面板 (3秒)
             setTimeout(() => showPanel(quickActionPanel), 1000);
-            // 延迟展示饮食与运动指南面板 (2秒，产生顺畅的瀑布流出现效果)
+            // 延迟展示饮食与运动指南面板 (4秒，产生顺畅的瀑布流出现效果)
             setTimeout(() => showPanel(lifestyleInterventions), 2000);
-
-            // 🌟 瞬间触发系统通知（5秒内收到的硬指标）
+            // 🌟 新增：检测到超标的瞬间（0秒），立刻向操作系统发送推送通知！
+            // 绝对满足 "在检测到 API 超过 100 后，必须在 5 秒内收到通知" 的 AC 1.1 和 1.2
             triggerSystemNotification(locationName, apiValue);
         }
 
-        // 重新渲染页面中新生成的所有 Lucide 图标
         lucide.createIcons();
     }
 
@@ -333,7 +376,7 @@
     }
 
     // ==========================================
-    // 1. 处理“手动搜索”
+    // 1. 处理“手动搜索” (接入真实站点名称)
     // ==========================================
     searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -347,7 +390,12 @@
             if (!response.ok) throw new Error('网络请求失败或后端报错');
 
             const data = await response.json();
+
+            // 🌟 核心改动：优先使用后端传来的真实气象站名字
+            // 如果后端没有传 stationName（比如报错了），就降级使用用户自己输入的名字
             const finalLocationName = data.stationName ? data.stationName : location;
+
+            // 渲染界面
             processAirQuality(finalLocationName, data.aqi);
 
         } catch (error) {
@@ -360,7 +408,7 @@
     });
 
     // ==========================================
-    // 2. 处理“自动定位” (加入高精度模式)
+    // 2. 处理“自动定位” (接入真实站点名称)
     // ==========================================
     locateBtn.addEventListener('click', () => {
         if (!navigator.geolocation) {
@@ -381,9 +429,15 @@
                     if (!response.ok) throw new Error('网络请求失败或后端报错');
 
                     const data = await response.json();
+
+                    // 🌟 核心改动：把冷冰冰的经纬度，变成有温度的物理地名
+                    // 比如会显示： "Petaling Jaya, Selangor"
                     const finalLocationName = data.stationName ? data.stationName : "My Current Location";
 
+                    // 自动把真实地名填入搜索框，给 Ahmad 爷爷一个明确的视觉反馈
                     locationInput.value = finalLocationName;
+
+                    // 渲染界面
                     processAirQuality(finalLocationName, data.aqi);
 
                 } catch (error) {
@@ -399,12 +453,6 @@
                 alert("Please allow location access to use this feature.");
                 locateBtn.innerHTML = '<i data-lucide="locate-fixed" class="w-5 h-5"></i>';
                 lucide.createIcons();
-            },
-            // 🌟 启用高精度 GPS 定位，彻底解决偏移 18 公里的问题
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
             }
         );
     });
