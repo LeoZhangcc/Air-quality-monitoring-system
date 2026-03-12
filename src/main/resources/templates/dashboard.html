@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AirGuard Malaysia - Dashboard</title>
-    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Lucide 图标库 -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @keyframes fadeIn { from { opacity: 0; transform: translateY(1rem); } to { opacity: 1; transform: translateY(0); } }
@@ -16,7 +14,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen">
 
-<!-- 顶部导航 -->
 <header class="bg-white border-b px-6 py-4 mb-8 sticky top-0 z-50 shadow-sm">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
         <div class="flex items-center gap-2 text-blue-600 font-bold text-xl">
@@ -30,9 +27,6 @@
 
 <main class="max-w-6xl mx-auto px-4 pb-16 space-y-12 animate-in">
 
-    <!-- ========================================== -->
-    <!-- 模块 1: 仪表盘与查询区 -->
-    <!-- ========================================== -->
     <div class="space-y-8">
         <section class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8 text-center relative overflow-hidden">
             <div class="relative z-10 max-w-xl mx-auto space-y-6">
@@ -42,9 +36,14 @@
                 <form id="search-form" class="flex gap-2">
                     <div class="relative flex-1">
                         <i data-lucide="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400"></i>
-                        <input type="text" id="location-input" placeholder="e.g. Kuala Lumpur (type 'bad' to simulate >100)" required
-                               class="w-full pl-10 pr-12 py-3 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button type="button" id="locate-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-blue-600" title="Use current location">
+                        <input type="text" id="location-input" placeholder="e.g. Kuala Lumpur (Type 'auto_bad' to test auto-alert)" required
+                               class="w-full pl-10 pr-20 py-3 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                        <button type="button" id="clear-btn" class="hidden absolute right-11 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors" title="Clear text">
+                            <i data-lucide="x-circle" class="w-5 h-5"></i>
+                        </button>
+
+                        <button type="button" id="locate-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-blue-600 transition-colors" title="Use current location">
                             <i data-lucide="locate-fixed" class="w-5 h-5"></i>
                         </button>
                     </div>
@@ -55,9 +54,7 @@
             </div>
         </section>
 
-        <!-- 结果展示区 -->
         <div id="result-section" class="grid grid-cols-1 md:grid-cols-2 gap-8 hidden">
-            <!-- 交通灯 API -->
             <section id="api-card" class="rounded-2xl border p-8 flex flex-col items-center justify-center text-center transition-colors">
                 <h2 class="text-lg font-semibold text-neutral-700 mb-2">Current API in <span id="display-location" class="font-bold text-slate-900">...</span></h2>
 
@@ -69,12 +66,15 @@
                 <div id="api-label" class="px-6 py-2 rounded-full text-white font-bold tracking-wide uppercase shadow-sm">
                     --
                 </div>
+
+                <div id="last-updated" class="text-xs font-medium text-slate-400 mt-6 hidden flex items-center justify-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+                    <i data-lucide="clock" class="w-3.5 h-3.5"></i> Last updated: <span id="update-time" class="text-slate-600">--</span>
+                </div>
             </section>
 
-            <!-- 防护建议 -->
             <div class="space-y-8 flex flex-col">
                 <section class="bg-white rounded-2xl border border-neutral-200 p-6 shadow-sm flex items-start gap-4">
-                    <div id="mask-icon-bg" class="p-4 rounded-xl shrink-0 bg-blue-100 text-blue-600">
+                    <div id="mask-icon-bg" class="p-4 rounded-xl shrink-0 bg-green-100 text-green-600">
                         <i data-lucide="shield-check" id="mask-icon" class="w-8 h-8"></i>
                     </div>
                     <div>
@@ -83,7 +83,6 @@
                     </div>
                 </section>
 
-                <!-- 紧急快速行动面板 -->
                 <div id="quick-action-panel" class="hidden transition-all duration-700 opacity-0 transform translate-y-4">
                     <section class="bg-red-50 rounded-2xl border-2 border-red-200 p-6 shadow-lg relative overflow-hidden">
                         <h3 class="text-xl font-bold text-red-800 mb-4 flex items-center gap-2">
@@ -101,45 +100,62 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 模块 2 & 3: 生活方式干预区 (API >= 100 时才会显示) -->
-    <!-- ========================================== -->
     <div id="lifestyle-interventions" class="hidden opacity-0 transform translate-y-8 transition-all duration-700 space-y-12">
-
         <hr class="border-slate-200">
-
-        <!-- 饮食与补水 -->
         <div class="space-y-8">
-            <!-- 标题部分 -->
             <div class="text-center max-w-2xl mx-auto space-y-4">
                 <h2 class="text-3xl font-bold text-neutral-900">Diet & Hydration</h2>
                 <p class="text-neutral-500 text-lg">The API is currently unhealthy. Protect your respiratory health from the inside out with these recipes.</p>
             </div>
-
-            <!-- 🌟 修复关键点：网格容器必须独立在这里 -->
-            <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 这里的卡片将由 JS 自动生成并塞入 -->
-            </div>
+            <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
-        <!-- 室内运动指南 -->
         <div class="space-y-12 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-            <!-- 标题部分 -->
             <div class="text-center max-w-2xl mx-auto space-y-4">
                 <h2 class="text-3xl font-bold text-neutral-900">Indoor Physical Activities</h2>
                 <p class="text-neutral-500 text-lg">Since it's unsafe outside, follow these low-impact guides to stay active indoors.</p>
             </div>
-
-            <!-- 🌟 修复关键点：网格容器必须独立在这里 -->
-            <div id="activity-container" class="space-y-12">
-                <!-- 这里的卡片将由 JS 自动生成并塞入 -->
-            </div>
+            <div id="activity-container" class="space-y-12"></div>
         </div>
     </div>
-
 </main>
 
-<!-- 核心逻辑与动画脚本 -->
+<div id="simulation-overlay" class="fixed inset-0 z-[110] hidden flex flex-col items-center justify-center bg-slate-900/85 backdrop-blur-md transition-opacity opacity-0 duration-300">
+    <div class="text-blue-400 mb-6 animate-[spin_3s_linear_infinite]">
+        <i data-lucide="loader-2" class="w-16 h-16"></i>
+    </div>
+
+    <h3 class="text-3xl font-bold text-white mb-2 tracking-wide">Time Travel Simulation</h3>
+    <p class="text-slate-300 text-lg mb-10">Fast-forwarding to the end of the current hour...</p>
+
+    <div class="flex items-baseline gap-2">
+        <span class="text-4xl text-slate-400 font-medium">T-minus</span>
+        <span class="text-8xl font-black text-white font-mono tabular-nums tracking-tighter" id="countdown-timer">10</span>
+        <span class="text-4xl text-slate-400 font-medium">s</span>
+    </div>
+
+    <p class="text-slate-400 mt-8 text-sm uppercase tracking-widest font-semibold flex items-center gap-2">
+        <i data-lucide="activity" class="w-4 h-4"></i> Background Auto-Refresh Engaged
+    </p>
+</div>
+
+<div id="emergency-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/70 backdrop-blur-md transition-opacity opacity-0 duration-300 px-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col items-center">
+        <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-6 animate-[pulse_1s_ease-in-out_infinite]">
+            <i data-lucide="siren" class="w-12 h-12 text-red-600"></i>
+        </div>
+        <h3 class="text-3xl font-black text-slate-900 mb-3 text-center">Health Alert!</h3>
+        <p class="text-slate-600 text-center mb-8 text-lg">
+            The API in <span id="modal-location" class="font-bold text-slate-900 border-b-2 border-slate-900">...</span> is currently <br>
+            <span id="modal-api" class="font-black text-red-600 text-5xl leading-tight block mt-3">...</span>
+            <span class="text-sm font-bold text-red-500 uppercase tracking-widest mt-2 block">Unhealthy</span>
+        </p>
+        <button id="close-modal-btn" class="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xl transition-colors shadow-lg shadow-red-200">
+            I Understand
+        </button>
+    </div>
+</div>
+
 <script>
     lucide.createIcons();
 
@@ -148,38 +164,45 @@
     const locateBtn = document.getElementById('locate-btn');
     const searchBtn = document.getElementById('search-btn');
     const resultSection = document.getElementById('result-section');
-
+    const clearBtn = document.getElementById('clear-btn');
     const quickActionPanel = document.getElementById('quick-action-panel');
     const lifestyleInterventions = document.getElementById('lifestyle-interventions');
 
-    // 加上了 async 关键字，完美解决 await 报错
+    const emergencyModal = document.getElementById('emergency-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const modalLocation = document.getElementById('modal-location');
+    const modalApi = document.getElementById('modal-api');
+
+    const simulationOverlay = document.getElementById('simulation-overlay');
+    const countdownTimer = document.getElementById('countdown-timer');
+
+    let currentSearchQuery = '';
+
+    closeModalBtn.addEventListener('click', () => {
+        emergencyModal.classList.add('opacity-0');
+        emergencyModal.querySelector('div').classList.remove('scale-100');
+        emergencyModal.querySelector('div').classList.add('scale-95');
+        setTimeout(() => emergencyModal.classList.add('hidden'), 300);
+    });
+
+    locationInput.addEventListener('input', () => {
+        if (locationInput.value.trim().length > 0) {
+            clearBtn.classList.remove('hidden');
+        } else {
+            clearBtn.classList.add('hidden');
+        }
+    });
+
+    clearBtn.addEventListener('click', () => {
+        locationInput.value = '';
+        clearBtn.classList.add('hidden');
+        locationInput.focus();
+        resultSection.classList.add('hidden');
+        hidePanel(quickActionPanel);
+        hidePanel(lifestyleInterventions);
+    });
+
     async function processAirQuality(locationName, apiValue) {
-        // 1. 页面加载时，立刻向用户请求发送系统通知的权限
-        if ("Notification" in window) {
-            if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        console.log("用户允许了系统推送通知。");
-                    }
-                });
-            }
-        }
-
-        // 2. 封装一个发送系统通知的函数
-        function triggerSystemNotification(locationName, aqiValue) {
-            if ("Notification" in window && Notification.permission === "granted") {
-                const notification = new Notification("🚨 AirGuard 紧急警报", {
-                    body: `警告！${locationName} 的空气指数已达 ${aqiValue} (不健康)。请立即回到室内！`,
-                    icon: "https://cdn-icons-png.flaticon.com/512/564/564246.png",
-                    vibrate: [200, 100, 200]
-                });
-                notification.onclick = function() {
-                    window.focus();
-                    this.close();
-                };
-            }
-        }
-
         resultSection.classList.remove('hidden');
         document.getElementById('display-location').innerText = locationName;
 
@@ -192,33 +215,31 @@
         const maskText = document.getElementById('mask-text');
 
         apiValueEl.innerText = apiValue;
+        document.getElementById('last-updated').classList.remove('hidden');
+        document.getElementById('update-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-        // 每次查询先重置隐藏的面板
         hidePanel(quickActionPanel);
         hidePanel(lifestyleInterventions);
 
-        if (apiValue < 50) {
-            // Good (绿色)
-            setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-blue-50', 'border-blue-200', 'text-blue-500', 'bg-blue-500', 'Good');
-            setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-blue-100', 'text-blue-600', 'shield-check', 'The air quality is acceptable. A standard surgical mask is sufficient if you prefer to wear one.');
-        } else if (apiValue < 100) {
-            // Moderate (黄色)
-            setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-green-50', 'border-green-200', 'text-green-500', 'bg-green-500', 'Moderate');
-            setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-blue-100', 'text-blue-600', 'shield-check', 'The air quality is acceptable. A standard surgical mask is sufficient if you prefer to wear one.');
+        // 🌟 修正了标准的颜色分级逻辑
+        if (apiValue <= 50) {
+            // 0 - 50: 绿色 (Good)
+            setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-green-50', 'border-green-200', 'text-green-500', 'bg-green-500', 'Good');
+            setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-green-100', 'text-green-600', 'shield-check', 'The air quality is good. Enjoy your outdoor activities safely!');
+        } else if (apiValue <= 100) {
+            // 51 - 100: 黄色 (Moderate)
+            setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-yellow-50', 'border-yellow-200', 'text-yellow-500', 'bg-yellow-500', 'Moderate');
+            setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-yellow-100', 'text-yellow-600', 'alert-circle', 'The air quality is moderate. A standard surgical mask is sufficient if you are sensitive.');
         } else {
-            // Unhealthy (API >= 100) - 触发红色警报及生活方式干预面板
+            // 101+: 红色 (Unhealthy)
             setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-red-50', 'border-red-200', 'text-red-500', 'bg-red-500', 'Unhealthy');
             setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-orange-100', 'text-orange-600', 'alert-triangle', 'The air quality is unhealthy. We highly recommend wearing an N95 respirator mask if you need to go outdoors.');
 
-            // 2. 去后端获取随机推荐数据 (动态卡片渲染)
             try {
-                // 注意：这里调用的是 /api/recommendations，请确保你的 Java 后端也是 @GetMapping("/api/recommendations")
-                // 如果你的 Java 是 /getRecommendations，请把这里改回去
                 const recResponse = await fetch('/getRecommendations');
                 if (recResponse.ok) {
                     const recData = await recResponse.json();
 
-                    // --- 3. 渲染 Diet & Hydration 卡片 (5条) ---
                     const dietContainer = document.getElementById('diet-container');
                     if (dietContainer) {
                         dietContainer.innerHTML = '';
@@ -230,7 +251,6 @@
                                     <span>${ing}</span>
                                 </li>`).join('');
 
-                            // 带有 onerror 备用图机制的精美卡片
                             dietContainer.innerHTML += `
                                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-200 hover:shadow-md flex flex-col">
                                     <div class="h-48 relative overflow-hidden bg-slate-100">
@@ -250,7 +270,6 @@
                         });
                     }
 
-                    // --- 4. 渲染 Indoor Physical Activities 卡片 (3条) ---
                     const activityContainer = document.getElementById('activity-container');
                     if (activityContainer) {
                         activityContainer.innerHTML = '';
@@ -263,7 +282,6 @@
 
                             let reverseClass = index % 2 !== 0 ? 'md:flex-row-reverse' : '';
 
-                            // 带有 onerror 备用图机制的大卡片
                             activityContainer.innerHTML += `
                                 <div class="flex flex-col md:flex-row gap-8 items-center ${reverseClass}">
                                     <div class="w-full md:w-1/2 rounded-2xl overflow-hidden shadow-md h-64 md:h-80 bg-slate-100 flex-shrink-0">
@@ -287,20 +305,23 @@
                 console.error("Failed to load recommendations:", error);
             }
 
-            // 延迟展示紧急动作面板 (1秒)
             setTimeout(() => showPanel(quickActionPanel), 1000);
-            // 延迟展示饮食与运动指南面板 (2秒，产生顺畅的瀑布流出现效果)
             setTimeout(() => showPanel(lifestyleInterventions), 2000);
 
-            // 🌟 瞬间触发系统通知（5秒内收到的硬指标）
-            triggerSystemNotification(locationName, apiValue);
+            setTimeout(() => {
+                modalLocation.innerText = locationName;
+                modalApi.innerText = apiValue;
+                emergencyModal.classList.remove('hidden');
+                void emergencyModal.offsetWidth;
+                emergencyModal.classList.remove('opacity-0');
+                emergencyModal.querySelector('div').classList.remove('scale-95');
+                emergencyModal.querySelector('div').classList.add('scale-100');
+            }, 500);
         }
 
-        // 重新渲染页面中新生成的所有 Lucide 图标
         lucide.createIcons();
     }
 
-    // 动画辅助函数：显示面板
     function showPanel(element) {
         element.classList.remove('hidden');
         setTimeout(() => {
@@ -309,7 +330,6 @@
         }, 50);
     }
 
-    // 动画辅助函数：隐藏面板
     function hidePanel(element) {
         element.classList.remove('opacity-100', 'translate-y-0');
         element.classList.add('opacity-0', 'translate-y-4');
@@ -332,14 +352,84 @@
         textEl.innerText = message;
     }
 
+    async function hourlyAutoRefresh(forceBad = false) {
+        if (!currentSearchQuery) return;
+
+        try {
+            let finalLocationName;
+            let apiValue;
+
+            if (forceBad) {
+                finalLocationName = document.getElementById('display-location').innerText || "Simulated Area";
+                apiValue = 135;
+            } else {
+                const response = await fetch(`/getApi?location=${encodeURIComponent(currentSearchQuery)}`);
+                if (!response.ok) return;
+                const data = await response.json();
+                finalLocationName = data.stationName ? data.stationName : currentSearchQuery;
+                apiValue = data.aqi;
+            }
+
+            processAirQuality(finalLocationName, apiValue);
+
+        } catch (error) {
+            console.error("自动刷新失败:", error);
+        }
+    }
+
     // ==========================================
-    // 1. 处理“手动搜索”
+    // 处理“手动搜索”及暗号拦截
     // ==========================================
     searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const location = locationInput.value.trim();
         if (!location) return;
 
+        // 拦截模拟暗号：auto_bad
+        if (location.toLowerCase() === 'auto_bad') {
+            if (!currentSearchQuery) { alert("Please locate or search a place first to simulate!"); return; }
+
+            locationInput.value = '';
+            clearBtn.classList.add('hidden');
+
+            // 触发高级沉浸式倒计时遮罩
+            simulationOverlay.classList.remove('hidden');
+            void simulationOverlay.offsetWidth; // 触发重绘
+            simulationOverlay.classList.remove('opacity-0');
+
+            let timeLeft = 10;
+            countdownTimer.innerText = timeLeft;
+
+            // 开始 10 秒倒计时
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                countdownTimer.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    // 倒计时结束，褪去遮罩
+                    simulationOverlay.classList.add('opacity-0');
+                    setTimeout(() => {
+                        simulationOverlay.classList.add('hidden');
+                        // 强制触发污染爆表刷新！
+                        hourlyAutoRefresh(true);
+                    }, 300);
+                }
+            }, 1000);
+
+            return;
+        }
+
+        // 拦截暗号：auto
+        if (location.toLowerCase() === 'auto') {
+            if (!currentSearchQuery) { alert("Please locate or search a place first!"); return; }
+            hourlyAutoRefresh(false);
+            locationInput.value = '';
+            clearBtn.classList.add('hidden');
+            return;
+        }
+
+        currentSearchQuery = location;
         searchBtn.innerHTML = '<span class="animate-spin rounded-full h-5 w-5 border-b-2 border-white inline-block"></span>';
 
         try {
@@ -348,6 +438,8 @@
 
             const data = await response.json();
             const finalLocationName = data.stationName ? data.stationName : location;
+
+            clearBtn.classList.remove('hidden');
             processAirQuality(finalLocationName, data.aqi);
 
         } catch (error) {
@@ -359,22 +451,25 @@
         }
     });
 
-    // ==========================================
-    // 2. 处理“自动定位” (加入高精度模式)
-    // ==========================================
-    locateBtn.addEventListener('click', () => {
+    function performGeolocation(isAuto = false) {
         if (!navigator.geolocation) {
-            alert("Your browser does not support geolocation.");
+            if (!isAuto) alert("Your browser does not support geolocation.");
             return;
         }
 
-        locateBtn.innerHTML = '<span class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 inline-block"></span>';
+        if (!isAuto) {
+            locateBtn.innerHTML = '<span class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 inline-block"></span>';
+        } else {
+            locationInput.placeholder = "Detecting your location, please wait...";
+        }
 
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
                 const geoQuery = `geo:${lat};${lon}`;
+
+                currentSearchQuery = geoQuery;
 
                 try {
                     const response = await fetch(`/getApi?location=${encodeURIComponent(geoQuery)}`);
@@ -384,29 +479,45 @@
                     const finalLocationName = data.stationName ? data.stationName : "My Current Location";
 
                     locationInput.value = finalLocationName;
+                    clearBtn.classList.remove('hidden');
                     processAirQuality(finalLocationName, data.aqi);
 
                 } catch (error) {
                     console.error("定位获取空气质量失败:", error);
-                    alert("Unable to retrieve air quality for your location.");
+                    if (!isAuto) alert("Unable to retrieve air quality for your location.");
                 } finally {
-                    locateBtn.innerHTML = '<i data-lucide="locate-fixed" class="w-5 h-5"></i>';
-                    lucide.createIcons();
+                    if (!isAuto) {
+                        locateBtn.innerHTML = '<i data-lucide="locate-fixed" class="w-5 h-5"></i>';
+                        lucide.createIcons();
+                    }
+                    locationInput.placeholder = "e.g. Kuala Lumpur (Type 'auto_bad' to test auto-alert)";
                 }
             },
             (error) => {
                 console.error("获取位置失败:", error);
-                alert("Please allow location access to use this feature.");
-                locateBtn.innerHTML = '<i data-lucide="locate-fixed" class="w-5 h-5"></i>';
-                lucide.createIcons();
+                locationInput.placeholder = "e.g. Kuala Lumpur (Type 'auto_bad' to test auto-alert)";
+                if (!isAuto) {
+                    alert("Please allow location access to use this feature.");
+                    locateBtn.innerHTML = '<i data-lucide="locate-fixed" class="w-5 h-5"></i>';
+                    lucide.createIcons();
+                }
             },
-            // 🌟 启用高精度 GPS 定位，彻底解决偏移 18 公里的问题
             {
                 enableHighAccuracy: true,
-                timeout: 10000,
+                timeout: 30000,
                 maximumAge: 0
             }
         );
+    }
+
+    setInterval(() => {
+        hourlyAutoRefresh(false);
+    }, 3600000);
+
+    locateBtn.addEventListener('click', () => performGeolocation(false));
+
+    window.addEventListener('DOMContentLoaded', () => {
+        performGeolocation(true);
     });
 </script>
 </body>
