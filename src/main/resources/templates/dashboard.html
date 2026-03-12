@@ -73,6 +73,7 @@
             </section>
 
             <div class="space-y-8 flex flex-col">
+
                 <section class="bg-white rounded-2xl border border-neutral-200 p-6 shadow-sm flex items-start gap-4">
                     <div id="mask-icon-bg" class="p-4 rounded-xl shrink-0 bg-green-100 text-green-600">
                         <i data-lucide="shield-check" id="mask-icon" class="w-8 h-8"></i>
@@ -178,11 +179,17 @@
 
     let currentSearchQuery = '';
 
+    const alertSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+    alertSound.loop = true;
+
     closeModalBtn.addEventListener('click', () => {
         emergencyModal.classList.add('opacity-0');
         emergencyModal.querySelector('div').classList.remove('scale-100');
         emergencyModal.querySelector('div').classList.add('scale-95');
         setTimeout(() => emergencyModal.classList.add('hidden'), 300);
+
+        alertSound.pause();
+        alertSound.currentTime = 0;
     });
 
     locationInput.addEventListener('input', () => {
@@ -221,17 +228,13 @@
         hidePanel(quickActionPanel);
         hidePanel(lifestyleInterventions);
 
-        // 🌟 修正了标准的颜色分级逻辑
         if (apiValue <= 50) {
-            // 0 - 50: 绿色 (Good)
             setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-green-50', 'border-green-200', 'text-green-500', 'bg-green-500', 'Good');
             setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-green-100', 'text-green-600', 'shield-check', 'The air quality is good. Enjoy your outdoor activities safely!');
         } else if (apiValue <= 100) {
-            // 51 - 100: 黄色 (Moderate)
             setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-yellow-50', 'border-yellow-200', 'text-yellow-500', 'bg-yellow-500', 'Moderate');
             setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-yellow-100', 'text-yellow-600', 'alert-circle', 'The air quality is moderate. A standard surgical mask is sufficient if you are sensitive.');
         } else {
-            // 101+: 红色 (Unhealthy)
             setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-red-50', 'border-red-200', 'text-red-500', 'bg-red-500', 'Unhealthy');
             setMaskAdvice(maskIconBg, maskIcon, maskText, 'bg-orange-100', 'text-orange-600', 'alert-triangle', 'The air quality is unhealthy. We highly recommend wearing an N95 respirator mask if you need to go outdoors.');
 
@@ -316,6 +319,8 @@
                 emergencyModal.classList.remove('opacity-0');
                 emergencyModal.querySelector('div').classList.remove('scale-95');
                 emergencyModal.querySelector('div').classList.add('scale-100');
+
+                alertSound.play().catch(e => console.log("浏览器限制了自动播放声音，需用户先与页面交互", e));
             }, 500);
         }
 
@@ -377,41 +382,33 @@
         }
     }
 
-    // ==========================================
-    // 处理“手动搜索”及暗号拦截
-    // ==========================================
     searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const location = locationInput.value.trim();
         if (!location) return;
 
-        // 拦截模拟暗号：auto_bad
         if (location.toLowerCase() === 'auto_bad') {
             if (!currentSearchQuery) { alert("Please locate or search a place first to simulate!"); return; }
 
             locationInput.value = '';
             clearBtn.classList.add('hidden');
 
-            // 触发高级沉浸式倒计时遮罩
             simulationOverlay.classList.remove('hidden');
-            void simulationOverlay.offsetWidth; // 触发重绘
+            void simulationOverlay.offsetWidth;
             simulationOverlay.classList.remove('opacity-0');
 
             let timeLeft = 10;
             countdownTimer.innerText = timeLeft;
 
-            // 开始 10 秒倒计时
             const timerInterval = setInterval(() => {
                 timeLeft--;
                 countdownTimer.innerText = timeLeft;
 
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    // 倒计时结束，褪去遮罩
                     simulationOverlay.classList.add('opacity-0');
                     setTimeout(() => {
                         simulationOverlay.classList.add('hidden');
-                        // 强制触发污染爆表刷新！
                         hourlyAutoRefresh(true);
                     }, 300);
                 }
@@ -420,7 +417,6 @@
             return;
         }
 
-        // 拦截暗号：auto
         if (location.toLowerCase() === 'auto') {
             if (!currentSearchQuery) { alert("Please locate or search a place first!"); return; }
             hourlyAutoRefresh(false);
