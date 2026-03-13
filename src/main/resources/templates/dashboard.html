@@ -63,12 +63,25 @@
                     <div id="api-value" class="text-6xl font-bold transition-colors">--</div>
                 </div>
 
-                <div id="api-label" class="px-6 py-2 rounded-full text-white font-bold tracking-wide uppercase shadow-sm">
+                <div id="api-label" class="px-6 py-2 rounded-full text-white font-bold tracking-wide uppercase shadow-sm mb-6">
                     --
                 </div>
 
-                <div id="last-updated" class="text-xs font-medium text-slate-400 mt-6 hidden flex items-center justify-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+                <div id="last-updated" class="text-xs font-medium text-slate-400 hidden flex items-center justify-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
                     <i data-lucide="clock" class="w-3.5 h-3.5"></i> Last updated: <span id="update-time" class="text-slate-600">--</span>
+                </div>
+
+                <div id="lifestyle-buttons" class="hidden flex-col gap-3 mt-6 w-full opacity-0 transition-opacity duration-500">
+                    <div class="h-px w-full bg-black/5 my-2"></div>
+                    <p class="text-sm font-bold text-slate-700 mb-1">Health Protections:</p>
+                    <div class="flex flex-col sm:flex-row gap-3 w-full">
+                        <button id="btn-diet" class="flex-1 py-3 px-4 bg-blue-50 text-blue-700 font-bold rounded-xl border border-blue-200 hover:bg-blue-100 hover:shadow-sm transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="coffee" class="w-5 h-5"></i> Diet & Hydration
+                        </button>
+                        <button id="btn-activity" class="flex-1 py-3 px-4 bg-purple-50 text-purple-700 font-bold rounded-xl border border-purple-200 hover:bg-purple-100 hover:shadow-sm transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="person-standing" class="w-5 h-5"></i> Indoor Activities
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -99,41 +112,66 @@
             </div>
         </div>
     </div>
+</main>
 
-    <div id="lifestyle-interventions" class="hidden opacity-0 transform translate-y-8 transition-all duration-700 space-y-12">
-        <hr class="border-slate-200">
-        <div class="space-y-8">
-            <div class="text-center max-w-2xl mx-auto space-y-4">
-                <h2 class="text-3xl font-bold text-neutral-900">Diet & Hydration</h2>
-                <p class="text-neutral-500 text-lg">The API is currently unhealthy. Protect your respiratory health from the inside out with these recipes.</p>
+<div id="diet-modal" class="fixed inset-0 z-[105] hidden flex items-center justify-center bg-slate-900/70 backdrop-blur-md transition-opacity opacity-0 duration-300 p-4 sm:p-6">
+    <div class="bg-white rounded-3xl w-full max-w-5xl max-h-full flex flex-col shadow-2xl transform scale-95 transition-transform duration-300 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white shrink-0">
+            <div>
+                <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="coffee" class="text-blue-500 w-6 h-6"></i> Diet & Hydration
+                </h3>
+                <p class="text-sm text-slate-500 mt-1">Protect your respiratory health from the inside out.</p>
             </div>
-            <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <button class="close-diet-modal w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-600 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
         </div>
-
-        <div class="space-y-12 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-            <div class="text-center max-w-2xl mx-auto space-y-4">
-                <h2 class="text-3xl font-bold text-neutral-900">Indoor Physical Activities</h2>
-                <p class="text-neutral-500 text-lg">Since it's unsafe outside, follow these low-impact guides to stay active indoors.</p>
+        <div class="p-6 overflow-y-auto bg-slate-50 grow">
+            <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             </div>
-            <div id="activity-container" class="space-y-12"></div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-100 bg-white shrink-0 flex justify-end">
+            <button class="close-diet-modal px-8 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition-colors shadow-md">Done</button>
         </div>
     </div>
-</main>
+</div>
+
+<div id="activity-modal" class="fixed inset-0 z-[105] hidden flex items-center justify-center bg-slate-900/70 backdrop-blur-md transition-opacity opacity-0 duration-300 p-4 sm:p-6">
+    <div class="bg-white rounded-3xl w-full max-w-5xl max-h-full flex flex-col shadow-2xl transform scale-95 transition-transform duration-300 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white shrink-0">
+            <div>
+                <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="person-standing" class="text-purple-500 w-6 h-6"></i> Indoor Activities
+                </h3>
+                <p class="text-sm text-slate-500 mt-1">Stay active indoors safely during haze.</p>
+            </div>
+            <button class="close-activity-modal w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-600 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div class="p-6 overflow-y-auto bg-slate-50 grow">
+            <div id="activity-container" class="space-y-6">
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-100 bg-white shrink-0 flex justify-end">
+            <button class="close-activity-modal px-8 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition-colors shadow-md">Done</button>
+        </div>
+    </div>
+</div>
+
 
 <div id="simulation-overlay" class="fixed inset-0 z-[110] hidden flex flex-col items-center justify-center bg-slate-900/85 backdrop-blur-md transition-opacity opacity-0 duration-300">
     <div class="text-blue-400 mb-6 animate-[spin_3s_linear_infinite]">
         <i data-lucide="loader-2" class="w-16 h-16"></i>
     </div>
-
     <h3 class="text-3xl font-bold text-white mb-2 tracking-wide">Time Travel Simulation</h3>
     <p class="text-slate-300 text-lg mb-10">Fast-forwarding to the end of the current hour...</p>
-
     <div class="flex items-baseline gap-2">
         <span class="text-4xl text-slate-400 font-medium">T-minus</span>
         <span class="text-8xl font-black text-white font-mono tabular-nums tracking-tighter" id="countdown-timer">10</span>
         <span class="text-4xl text-slate-400 font-medium">s</span>
     </div>
-
     <p class="text-slate-400 mt-8 text-sm uppercase tracking-widest font-semibold flex items-center gap-2">
         <i data-lucide="activity" class="w-4 h-4"></i> Background Auto-Refresh Engaged
     </p>
@@ -166,7 +204,13 @@
     const resultSection = document.getElementById('result-section');
     const clearBtn = document.getElementById('clear-btn');
     const quickActionPanel = document.getElementById('quick-action-panel');
-    const lifestyleInterventions = document.getElementById('lifestyle-interventions');
+
+    // 新增：弹窗按钮与容器
+    const lifestyleButtons = document.getElementById('lifestyle-buttons');
+    const dietModal = document.getElementById('diet-modal');
+    const activityModal = document.getElementById('activity-modal');
+    const btnDiet = document.getElementById('btn-diet');
+    const btnActivity = document.getElementById('btn-activity');
 
     const emergencyModal = document.getElementById('emergency-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -178,42 +222,56 @@
 
     let currentSearchQuery = '';
 
-    // ==========================================
-    // 🎵 移动端音频解锁补丁 (核心黑科技)
-    // ==========================================
     const alertSound = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
     alertSound.loop = true;
 
     let audioUnlocked = false;
     function unlockAudio() {
         if (!audioUnlocked) {
-            // 让音频极短地播放一下然后瞬间暂停，以此获取手机浏览器的“永久播放通行证”
             alertSound.play().then(() => {
                 alertSound.pause();
                 alertSound.currentTime = 0;
                 audioUnlocked = true;
-                console.log("🔊 移动端音频已成功解锁！");
-                // 解锁后就移除监听，避免浪费性能
                 document.body.removeEventListener('click', unlockAudio);
                 document.body.removeEventListener('touchstart', unlockAudio);
-            }).catch(e => console.log("音频解锁等待中...", e));
+            }).catch(e => console.log("等待交互解锁音频..."));
         }
     }
-    // 监听用户在网页上的任意点击或触摸，只要摸一下屏幕就解锁声音
     document.body.addEventListener('click', unlockAudio);
     document.body.addEventListener('touchstart', unlockAudio);
 
     // ==========================================
+    // 🌟 弹窗开关逻辑
+    // ==========================================
+    function openModal(modal) {
+        modal.classList.remove('hidden');
+        void modal.offsetWidth; // trigger reflow
+        modal.classList.remove('opacity-0');
+        modal.querySelector('div').classList.remove('scale-95');
+        modal.querySelector('div').classList.add('scale-100');
+    }
+
+    function closeModal(modal) {
+        modal.classList.add('opacity-0');
+        modal.querySelector('div').classList.remove('scale-100');
+        modal.querySelector('div').classList.add('scale-95');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    // 绑定开启
+    btnDiet.addEventListener('click', () => openModal(dietModal));
+    btnActivity.addEventListener('click', () => openModal(activityModal));
+
+    // 绑定关闭 (支持顶部 X 按钮和底部 Done 按钮)
+    document.querySelectorAll('.close-diet-modal').forEach(btn => btn.addEventListener('click', () => closeModal(dietModal)));
+    document.querySelectorAll('.close-activity-modal').forEach(btn => btn.addEventListener('click', () => closeModal(activityModal)));
 
     closeModalBtn.addEventListener('click', () => {
-        emergencyModal.classList.add('opacity-0');
-        emergencyModal.querySelector('div').classList.remove('scale-100');
-        emergencyModal.querySelector('div').classList.add('scale-95');
-        setTimeout(() => emergencyModal.classList.add('hidden'), 300);
-
+        closeModal(emergencyModal);
         alertSound.pause();
         alertSound.currentTime = 0;
     });
+    // ==========================================
 
     locationInput.addEventListener('input', () => {
         if (locationInput.value.trim().length > 0) {
@@ -229,7 +287,7 @@
         locationInput.focus();
         resultSection.classList.add('hidden');
         hidePanel(quickActionPanel);
-        hidePanel(lifestyleInterventions);
+        hidePanel(lifestyleButtons);
     });
 
     async function processAirQuality(locationName, apiValue) {
@@ -249,7 +307,7 @@
         document.getElementById('update-time').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
         hidePanel(quickActionPanel);
-        hidePanel(lifestyleInterventions);
+        hidePanel(lifestyleButtons);
 
         if (apiValue <= 50) {
             setColors(apiCard, apiValueEl, apiCircleBg, apiLabel, 'bg-green-50', 'border-green-200', 'text-green-500', 'bg-green-500', 'Good');
@@ -272,20 +330,23 @@
                         recData.diets.forEach(diet => {
                             let tagsHtml = diet.tags.map(tag => `<span class="text-xs font-semibold px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full">${tag}</span>`).join('');
                             let ingredientsHtml = diet.ingredients.map(ing => `
-                                <li class="text-sm text-neutral-500 flex items-start gap-2">
+                                <li class="text-sm text-neutral-600 flex items-start gap-2">
                                     <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i>
                                     <span>${ing}</span>
                                 </li>`).join('');
 
                             dietContainer.innerHTML += `
                                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-neutral-200 hover:shadow-md flex flex-col">
+                                    <div class="h-48 relative overflow-hidden bg-slate-100">
+                                        <img src="${diet.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&fit=crop'" class="w-full h-full object-cover" alt="${diet.title}">
+                                    </div>
                                     <div class="p-6 flex-1 flex flex-col">
                                         <div class="flex gap-2 mb-3">${tagsHtml}</div>
                                         <h3 class="text-xl font-bold text-neutral-900 mb-2">${diet.title}</h3>
                                         <p class="text-sm text-neutral-600 mb-4 flex-1">${diet.description}</p>
                                         <div class="mt-auto pt-4 border-t border-neutral-100">
                                             <h4 class="text-sm font-semibold text-neutral-900 mb-2">Ingredients:</h4>
-                                            <ul class="space-y-1">${ingredientsHtml}</ul>
+                                            <ul class="space-y-1.5">${ingredientsHtml}</ul>
                                         </div>
                                     </div>
                                 </div>
@@ -299,17 +360,24 @@
                         recData.activities.forEach((activity, index) => {
                             let stepsHtml = activity.steps.map((step, i) => `
                                 <li class="flex gap-3 text-neutral-700">
-                                    <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 font-bold text-sm">${i + 1}</span>
+                                    <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-purple-100 text-purple-600 font-bold text-sm">${i + 1}</span>
                                     <span>${step}</span>
                                 </li>`).join('');
 
                             activityContainer.innerHTML += `
-                                <div class="bg-white rounded-2xl p-6 border border-neutral-200 shadow-sm">
-                                    <div class="inline-block px-3 py-1 bg-neutral-100 text-neutral-600 rounded-full text-sm font-semibold mb-4">Activity ${index + 1}</div>
-                                    <h3 class="text-2xl font-bold text-neutral-900 mb-2">${activity.title}</h3>
-                                    <p class="text-neutral-600 text-lg leading-relaxed mb-6">${activity.description}</p>
-                                    <h4 class="font-semibold text-neutral-900 mb-3 text-lg">Step-by-Step Guide:</h4>
-                                    <ul class="space-y-3">${stepsHtml}</ul>
+                                <div class="bg-white rounded-2xl p-6 border border-neutral-200 shadow-sm flex flex-col md:flex-row gap-8 items-center">
+                                    <div class="w-full md:w-2/5 rounded-xl overflow-hidden shadow-inner h-48 md:h-64 bg-slate-100 flex-shrink-0">
+                                        <img src="${activity.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&fit=crop'" class="w-full h-full object-cover" alt="${activity.title}">
+                                    </div>
+                                    <div class="flex-1 space-y-4 w-full">
+                                        <div class="inline-block px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm font-semibold mb-2">Activity ${index + 1}</div>
+                                        <h3 class="text-2xl font-bold text-neutral-900">${activity.title}</h3>
+                                        <p class="text-neutral-600 text-base leading-relaxed">${activity.description}</p>
+                                        <div class="pt-2">
+                                            <h4 class="font-semibold text-neutral-900 mb-3 text-lg">Step-by-Step Guide:</h4>
+                                            <ul class="space-y-3">${stepsHtml}</ul>
+                                        </div>
+                                    </div>
                                 </div>
                             `;
                         });
@@ -320,17 +388,14 @@
             }
 
             setTimeout(() => showPanel(quickActionPanel), 1000);
-            setTimeout(() => showPanel(lifestyleInterventions), 2000);
+
+            // 🌟 延迟显示这两个新按钮
+            setTimeout(() => showPanel(lifestyleButtons), 1500);
 
             setTimeout(() => {
                 modalLocation.innerText = locationName;
                 modalApi.innerText = apiValue;
-                emergencyModal.classList.remove('hidden');
-                void emergencyModal.offsetWidth;
-                emergencyModal.classList.remove('opacity-0');
-                emergencyModal.querySelector('div').classList.remove('scale-95');
-                emergencyModal.querySelector('div').classList.add('scale-100');
-
+                openModal(emergencyModal);
                 alertSound.play().catch(e => console.log("警报声播放失败", e));
             }, 500);
         }
@@ -370,11 +435,9 @@
 
     async function hourlyAutoRefresh(forceBad = false) {
         if (!currentSearchQuery) return;
-
         try {
             let finalLocationName;
             let apiValue;
-
             if (forceBad) {
                 finalLocationName = document.getElementById('display-location').innerText || "Simulated Area";
                 apiValue = 135;
@@ -385,9 +448,7 @@
                 finalLocationName = data.stationName ? data.stationName : currentSearchQuery;
                 apiValue = data.aqi;
             }
-
             processAirQuality(finalLocationName, apiValue);
-
         } catch (error) {
             console.error("自动刷新失败:", error);
         }
@@ -400,31 +461,22 @@
 
         if (location.toLowerCase() === 'auto_bad') {
             if (!currentSearchQuery) { alert("Please locate or search a place first to simulate!"); return; }
-
             locationInput.value = '';
             clearBtn.classList.add('hidden');
 
-            simulationOverlay.classList.remove('hidden');
-            void simulationOverlay.offsetWidth;
-            simulationOverlay.classList.remove('opacity-0');
-
+            openModal(simulationOverlay);
             let timeLeft = 10;
             countdownTimer.innerText = timeLeft;
 
             const timerInterval = setInterval(() => {
                 timeLeft--;
                 countdownTimer.innerText = timeLeft;
-
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    simulationOverlay.classList.add('opacity-0');
-                    setTimeout(() => {
-                        simulationOverlay.classList.add('hidden');
-                        hourlyAutoRefresh(true);
-                    }, 300);
+                    closeModal(simulationOverlay);
+                    setTimeout(() => hourlyAutoRefresh(true), 300);
                 }
             }, 1000);
-
             return;
         }
 
@@ -475,7 +527,6 @@
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
                 const geoQuery = `geo:${lat};${lon}`;
-
                 currentSearchQuery = geoQuery;
 
                 try {
