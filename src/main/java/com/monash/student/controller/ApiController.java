@@ -123,8 +123,8 @@ public class ApiController {
         log.info("======================getRandomRecommendations============================");
 
         // ==========================================
-// 1. 准备 20 种护肺/抗炎饮食数据池 (图片已全部更新为独立有效链接)
-// ==========================================
+        // 1. 准备 20 种护肺/抗炎饮食数据池
+        // ==========================================
         List<Diet> allDiets = new ArrayList<>(Arrays.asList(
                 new Diet("Ginger Honey Lemon Tea", "Reduces inflammation in the throat and boosts immune system.", "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop", Arrays.asList("Hydration", "Immunity"), Arrays.asList("1 inch fresh ginger, sliced", "1 tbsp raw honey", "Half a lemon, juiced")),
                 new Diet("Clear Chicken Soup", "Warm liquids help clear mucus. Easy to digest and repairing.", "https://images.unsplash.com/photo-1547592180-85f173990554?w=500&auto=format&fit=crop", Arrays.asList("Comfort", "Recovery"), Arrays.asList("200g chicken breast", "1 carrot, chopped", "1 celery stalk")),
@@ -148,9 +148,9 @@ public class ApiController {
                 new Diet("Garlic and Onion Broth", "Natural antibacterial properties that boost the immune system's defense.", "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&auto=format&fit=crop", Arrays.asList("Immunity", "Warm"), Arrays.asList("2 cloves garlic, crushed", "1/2 onion, chopped", "Vegetable stock"))
         ));
 
-// ==========================================
-// 2. 准备 20 种室内低强度运动数据池 (图片已全部更新为独立有效链接)
-// ==========================================
+        // ==========================================
+        // 2. 准备 20 种室内低强度运动数据池
+        // ==========================================
         List<Activity> allActivities = new ArrayList<>(Arrays.asList(
                 new Activity("Indoor Yoga & Deep Breathing", "Improves circulation and lung capacity without heavy breathing.", "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&auto=format&fit=crop", Arrays.asList("Find a quiet space and sit comfortably.", "5 minutes of alternate nostril breathing.", "Perform gentle seated stretches.", "End with relaxation.")),
                 new Activity("Chair Tai Chi", "Slow, deliberate movements that improve balance indoors safely.", "https://images.unsplash.com/photo-1516636176313-0857dc4622b1?w=500&auto=format&fit=crop", Arrays.asList("Sit upright in a sturdy chair.", "Slowly raise arms to shoulder height, inhaling.", "Gently push hands forward while exhaling.", "Repeat for 10 minutes.")),
@@ -160,7 +160,10 @@ public class ApiController {
                 new Activity("Seated Neck Rolls", "Relieves tension from staying indoors with gentle stretches.", "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&auto=format&fit=crop", Arrays.asList("Sit up straight and relax your shoulders.", "Gently drop your chin to your chest.", "Slowly roll your right ear to your right shoulder.", "Roll back down and over to the left.")),
                 new Activity("Ankle Rotations", "Keeps ankle joints flexible and prevents stiffness while watching TV.", "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=500&auto=format&fit=crop", Arrays.asList("Sit securely in a chair.", "Lift your right foot slightly off the floor.", "Rotate the ankle slowly 5 times clockwise.", "Repeat counter-clockwise, then switch feet.")),
                 new Activity("Gentle Arm Circles", "Enhances shoulder mobility and opens up the chest for better breathing.", "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&auto=format&fit=crop", Arrays.asList("Sit or stand tall.", "Extend your arms straight out to the sides.", "Draw small circles in the air with your hands.", "Do 10 forward circles, then 10 backward.")),
-                new Activity("Heel-to-Toe Standing", "Excellent for improving balance and preventing falls at home.", "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=500&auto=format&fit=crop", Arrays.asList("Stand next to a wall or counter for support.", "Place the heel of one foot directly in front of the toes of the other.", "Hold this balanced position for 10 seconds.", "Switch feet and repeat.")),
+
+                // 🌟 修复关键点：替换了原来那个展示 GitHub 网页截图的错误图片链接
+                new Activity("Heel-to-Toe Standing", "Excellent for improving balance and preventing falls at home.", "https://images.unsplash.com/photo-1598266663412-7bb3968600f1?w=500&auto=format&fit=crop", Arrays.asList("Stand next to a wall or counter for support.", "Place the heel of one foot directly in front of the toes of the other.", "Hold this balanced position for 10 seconds.", "Switch feet and repeat.")),
+
                 new Activity("Pursed-Lip Breathing", "A clinical exercise to strengthen lung capacity during hazy days.", "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=500&auto=format&fit=crop", Arrays.asList("Relax your neck and shoulder muscles.", "Breathe in slowly through your nose for 2 counts.", "Pucker your lips as if you're going to whistle.", "Breathe out slowly and gently through your lips for 4 counts.")),
                 new Activity("Seated Torso Twists", "Maintains spinal flexibility and aids digestion.", "https://images.unsplash.com/photo-1554284126-aa88f22d8b74?w=500&auto=format&fit=crop", Arrays.asList("Sit tall in a chair, feet flat on the floor.", "Cross your arms over your chest.", "Slowly twist your upper body to the right.", "Hold for 3 seconds, return to center, twist left.")),
                 new Activity("Calf Raises", "Strengthens calves to support steady walking.", "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=500&auto=format&fit=crop", Arrays.asList("Stand behind a sturdy chair, holding the back for balance.", "Slowly rise up onto your tiptoes.", "Hold for 1 second at the top.", "Slowly lower your heels back to the floor. Repeat 10 times.")),
@@ -173,6 +176,7 @@ public class ApiController {
                 new Activity("Seated Marching", "A great cardiovascular workout that doesn't risk falls.", "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&auto=format&fit=crop", Arrays.asList("Sit towards the front of your chair.", "Alternate lifting your knees up toward the ceiling, like marching.", "Pump your arms gently as you march.", "Continue for 2-3 minutes.")),
                 new Activity("Guided Meditation", "Reduces anxiety and stress caused by being confined indoors.", "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&auto=format&fit=crop", Arrays.asList("Sit comfortably and close your eyes.", "Focus entirely on the sensation of air entering your nose.", "Notice your chest rising and falling.", "When your mind wanders, gently bring focus back to your breath."))
         ));
+
         // ==========================================
         // 3. 随机打乱列表，并截取所需数量
         // ==========================================
