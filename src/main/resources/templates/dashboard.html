@@ -12,9 +12,9 @@
         .transition-all { transition: all 0.5s ease-in-out; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-<header class="bg-white border-b px-6 py-4 mb-8 sticky top-0 z-50 shadow-sm">
+<header class="bg-white border-b px-6 py-4 mb-8 sticky top-0 z-50 shadow-sm shrink-0">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
         <div class="flex items-center gap-2 text-blue-600 font-bold text-xl">
             <i data-lucide="wind"></i> AirGuard Malaysia
@@ -25,7 +25,7 @@
     </div>
 </header>
 
-<main class="max-w-6xl mx-auto px-4 pb-16 space-y-12 animate-in">
+<main class="max-w-6xl mx-auto w-full px-4 pb-8 space-y-12 animate-in grow">
 
     <div class="space-y-8">
         <section class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8 text-center relative overflow-hidden">
@@ -114,6 +114,24 @@
     </div>
 </main>
 
+<footer class="w-full max-w-6xl mx-auto px-4 py-8 mt-auto border-t border-slate-200 text-center shrink-0">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-2 text-slate-400 text-sm font-medium">
+        <div class="flex items-center gap-1.5">
+            <i data-lucide="database" class="w-4 h-4"></i>
+            <span>Data Source:</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-1">
+            <a href="http://apims.doe.gov.my/" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 hover:underline transition-colors">
+                Department of Environment (DOE) Malaysia
+            </a>
+            <span class="mx-1">&amp;</span>
+            <a href="https://aqicn.org/" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 hover:underline transition-colors">
+                WAQI API
+            </a>
+        </div>
+    </div>
+</footer>
+
 <div id="diet-modal" class="fixed inset-0 z-[105] hidden flex items-center justify-center bg-slate-900/70 backdrop-blur-md transition-opacity opacity-0 duration-300 p-4 sm:p-6">
     <div class="bg-white rounded-3xl w-full max-w-5xl max-h-full flex flex-col shadow-2xl transform scale-95 transition-transform duration-300 overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white shrink-0">
@@ -128,8 +146,7 @@
             </button>
         </div>
         <div class="p-6 overflow-y-auto bg-slate-50 grow">
-            <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            </div>
+            <div id="diet-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
         <div class="px-6 py-4 border-t border-slate-100 bg-white shrink-0 flex justify-end">
             <button class="close-diet-modal px-8 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition-colors shadow-md">Done</button>
@@ -151,15 +168,13 @@
             </button>
         </div>
         <div class="p-6 overflow-y-auto bg-slate-50 grow">
-            <div id="activity-container" class="space-y-6">
-            </div>
+            <div id="activity-container" class="space-y-6"></div>
         </div>
         <div class="px-6 py-4 border-t border-slate-100 bg-white shrink-0 flex justify-end">
             <button class="close-activity-modal px-8 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition-colors shadow-md">Done</button>
         </div>
     </div>
 </div>
-
 
 <div id="simulation-overlay" class="fixed inset-0 z-[110] hidden flex flex-col items-center justify-center bg-slate-900/85 backdrop-blur-md transition-opacity opacity-0 duration-300">
     <div class="text-blue-400 mb-6 animate-[spin_3s_linear_infinite]">
@@ -205,7 +220,6 @@
     const clearBtn = document.getElementById('clear-btn');
     const quickActionPanel = document.getElementById('quick-action-panel');
 
-    // 新增：弹窗按钮与容器
     const lifestyleButtons = document.getElementById('lifestyle-buttons');
     const dietModal = document.getElementById('diet-modal');
     const activityModal = document.getElementById('activity-modal');
@@ -240,12 +254,9 @@
     document.body.addEventListener('click', unlockAudio);
     document.body.addEventListener('touchstart', unlockAudio);
 
-    // ==========================================
-    // 🌟 弹窗开关逻辑
-    // ==========================================
     function openModal(modal) {
         modal.classList.remove('hidden');
-        void modal.offsetWidth; // trigger reflow
+        void modal.offsetWidth;
         modal.classList.remove('opacity-0');
         modal.querySelector('div').classList.remove('scale-95');
         modal.querySelector('div').classList.add('scale-100');
@@ -258,11 +269,9 @@
         setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
-    // 绑定开启
     btnDiet.addEventListener('click', () => openModal(dietModal));
     btnActivity.addEventListener('click', () => openModal(activityModal));
 
-    // 绑定关闭 (支持顶部 X 按钮和底部 Done 按钮)
     document.querySelectorAll('.close-diet-modal').forEach(btn => btn.addEventListener('click', () => closeModal(dietModal)));
     document.querySelectorAll('.close-activity-modal').forEach(btn => btn.addEventListener('click', () => closeModal(activityModal)));
 
@@ -271,7 +280,6 @@
         alertSound.pause();
         alertSound.currentTime = 0;
     });
-    // ==========================================
 
     locationInput.addEventListener('input', () => {
         if (locationInput.value.trim().length > 0) {
@@ -388,8 +396,6 @@
             }
 
             setTimeout(() => showPanel(quickActionPanel), 1000);
-
-            // 🌟 延迟显示这两个新按钮
             setTimeout(() => showPanel(lifestyleButtons), 1500);
 
             setTimeout(() => {
